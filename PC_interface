@@ -1,0 +1,31 @@
+import processing.serial.*;
+String weight_price=null;
+String message1="waiting...";
+String message2="waiting...";
+Serial myPort;
+
+void setup(){ //Same as setup in arduino
+  size(500, 500);                            //Window size, (width, height)
+  myPort = new Serial(this, "COM10", 38400);   //Change this to your port
+}
+
+void draw(){                                //Same as loop in arduino
+  background(177,114,182);                  //Background colour of window (r, g, b) or (0 to 255)
+  fill (0, 0, 0); 
+  textSize(30);
+  text("The Weight and Price display", 70, 80); 
+  text("Weight(kg): ", 90, 200); 
+  text("Price($): ", 90, 300); 
+  if(myPort.available()>0){
+      weight_price=myPort.readStringUntil('\n');
+  }
+  if(weight_price!=null){
+     String a[] = split(weight_price, ',');  //a new array (called 'a') that stores values into separate cells
+     message1 = a[0];
+     message2 = a[1];
+     weight_price = null;  
+  }
+  text(message1,280,200);
+  text(message2,280,300);
+  //text("       kg",250,200);
+}
